@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,18 +10,21 @@ public class PlayerController : MonoBehaviour
     private float xAxis = 0f;
     private float yAxis = 0f;
     Vector2 velocityVector = new Vector2();
-
+    PhotonView photonView;
 
 
     // Start is called before the first frame update
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
+        photonView = GetComponent<PhotonView>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!photonView.IsMine)
+            return;
         xAxis = Input.GetAxis("Horizontal");
         yAxis = Input.GetAxis("Vertical");
 
@@ -30,6 +34,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!photonView.IsMine)
+            return;
         rb2d.velocity = velocityVector;
     }
 }
